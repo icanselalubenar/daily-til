@@ -5,6 +5,12 @@ on:
     # 02:00 UTC = 09:00 WIB (setiap hari)
     - cron: '0 2 * * *'
   workflow_dispatch:
+    inputs:
+      test_failure:
+        description: 'Simulate failure to test Telegram alert'
+        required: false
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -23,6 +29,12 @@ jobs:
 
       - name: Generate Today TIL note
         run: python3 generate_til.py
+
+      - name: Simulate failure for testing
+        if: ${{ inputs.test_failure }}
+        run: |
+          echo "Simulating failure for Telegram alert test..."
+          exit 1
 
       - name: Commit and Push
         run: |
