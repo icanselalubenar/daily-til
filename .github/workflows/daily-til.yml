@@ -1,0 +1,37 @@
+name: Daily GitHub Contribution
+
+on:
+  schedule:
+    # 02:00 UTC = 09:00 WIB (setiap hari)
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  daily-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Generate Today TIL note
+        run: python3 generate_til.py
+
+      - name: Commit and Push
+        run: |
+          git config user.name "Ikhsan Abdul Rafi"
+          git config user.email "clashroyae1000@gmail.com"
+          git add -A
+          if git diff --staged --quiet; then
+            echo "No changes to commit today"
+          else
+            git commit -m "docs: daily til $(date +'%Y-%m-%d')"
+            git push
+          fi
