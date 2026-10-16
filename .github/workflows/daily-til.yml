@@ -2,8 +2,8 @@ name: Daily GitHub Contribution
 
 on:
   schedule:
-    # 02:00 UTC = 09:00 WIB (setiap hari)
-    - cron: '0 2 * * *'
+    # 02:07 UTC = 09:07 WIB (menghindari antrean peak jam genap GitHub Actions)
+    - cron: '7 2 * * *'
   workflow_dispatch:
     inputs:
       test_failure:
